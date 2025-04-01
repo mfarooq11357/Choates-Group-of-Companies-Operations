@@ -292,137 +292,101 @@
   </div>
 
   <!-- Countdown Script -->
-  <script>
-    // Set target date: 28 days from now
-    const targetDate = new Date();
-    targetDate.setDate(targetDate.getDate() + 28);
-
-    function updateCountdown() {
-      const currentDate = new Date();
-      const diff = targetDate - currentDate;
-
-      if (diff < 0) {
-        document.getElementById('days').innerText = 0;
-        document.getElementById('hours').innerText = '00';
-        document.getElementById('minutes').innerText = '00';
-        document.getElementById('seconds').innerText = '00';
-        clearInterval(countdownInterval);
+  <script defer>
+    window.addEventListener('load', function() {
+      if (!window.botpress) {
+        console.error("Botpress script failed to load.");
         return;
       }
-
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-      document.getElementById('days').innerText = days;
-      document.getElementById('hours').innerText = hours.toString().padStart(2, '0');
-      document.getElementById('minutes').innerText = minutes.toString().padStart(2, '0');
-      document.getElementById('seconds').innerText = seconds.toString().padStart(2, '0');
-    }
-    
-    updateCountdown();
-    const countdownInterval = setInterval(updateCountdown, 1000);
-
-    // Subscription form handling
-    document.getElementById('subscribeForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const email = document.querySelector('.subscribe-input').value;
-      if (email) {
-        alert('Thank you! You will be notified when we launch.');
-        this.reset();
-      }
-    });
-  </script>
-
-  <!-- Botpress Webchat & TTS Integration Script -->
- <!-- Botpress Webchat & TTS Integration Script -->
- <script defer>
-  window.addEventListener('load', function() {
-    // Check if Botpress is available
-    if (!window.botpress) {
-      console.error("Botpress script failed to load.");
-      return;
-    }
-    console.log("Initializing Botpress...");
-
-    // Initialize Botpress webchat with your configuration
-    window.botpress.init({
-      "botId": "d3aea06d-0f04-4701-bec3-b457caf79902",
-      "configuration": {
-        "botName": "Elisa AI Chat",
-        "botAvatar": "https://media.istockphoto.com/id/1445426863/vector/chat-bot-vector-logo-design-concept.jpg?s=612x612&w=0&k=20&c=XDdfzS4lNW9yxQ0BQGZq9KMLL4bJ8ywXlYdAhBSuoCA=",
-        "initialPayload": "welcome",
-        "website": {},
-        "email": {},
-        "phone": {},
-        "termsOfService": {},
-        "privacyPolicy": {},
-        "color": "#e94560",
-        "variant": "solid",
-        "themeMode": "light",
-        "fontFamily": "inter",
-        "radius": 1
-      },
-      "clientId": "1b16b64e-ea32-4160-a8c1-6c61d3fddd0e"
-    });
-
-    // Listen for the webchat ready event
-    window.botpress.on("webchat:ready", () => {
-      console.log("Webchat is ready.");
-      window.botpress.open();
-
-      // Global variable to store the currently playing audio
-      let currentAudio = null;
-
-      // Listen for messages
-      window.botpress.on('message', (message) => {
-        console.log("Received message event:", message);
-        // Check if metadata or metadata.clientId is undefined.
-        if (typeof message.metadata === "undefined") {
-          // Attempt to extract the text from the nested block
-          const text = message.block?.block?.text;
+      
+      // Prevent reinitialization if already done
+      if (window.__botpressTTSInitialized) return;
+      window.__botpressTTSInitialized = true;
+      
+      console.log("Initializing Botpress...");
+      
+      window.botpress.init({
+        "botId": "d3aea06d-0f04-4701-bec3-b457caf79902",
+        "configuration": {
+          "botName": "Elisa AI Chat",
+          "botAvatar": "https://media.istockphoto.com/id/1445426863/vector/chat-bot-vector-logo-design-concept.jpg?s=612x612&w=0&k=20&c=XDdfzS4lNW9yxQ0BQGZq9KMLL4bJ8ywXlYdAhBSuoCA=",
+          "initialPayload": "welcome",
+          "website": {},
+          "email": {},
+          "phone": {},
+          "termsOfService": {},
+          "privacyPolicy": {},
+          "color": "#e94560",
+          "variant": "solid",
+          "themeMode": "light",
+          "fontFamily": "inter",
+          "radius": 1
+        },
+        "clientId": "1b16b64e-ea32-4160-a8c1-6c61d3fddd0e"
+      });
+      
+      window.botpress.on("webchat:ready", () => {
+        console.log("Webchat is ready.");
+        window.botpress.open();
+        
+        // Global variable to store the currently playing audio
+        let currentAudio = null;
+        // Set to keep track of processed message IDs
+        const processedMessages = new Set();
+        
+        // Only register the message listener once
+        if (!window.__botpressTTSMessageListenerRegistered) {
+          window.__botpressTTSMessageListenerRegistered = true;
           
-          if (!text) {
-            console.warn("No text found in message:", message);
-            return;
-          }
-          
-          console.log("Text to synthesize (bot response):", text);
-
-          // Stop any currently playing audio
-          if (currentAudio) {
-            currentAudio.pause();
-            currentAudio.currentTime = 0;
-          }
-
-          // Send the text to the TTS backend
-          fetch('https://dk5rf8-3000.csb.app/synthesize', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ text: text })
-          })
-          .then(response => {
-            if (!response.ok) throw new Error('TTS endpoint failed');
-            return response.blob();
-          })
-          .then(blob => {
-            const url = URL.createObjectURL(blob);
-            currentAudio = new Audio(url);
-            currentAudio.play().catch(err => console.error("Error during audio playback:", err));
-          })
-          .catch(error => {
-            console.error('Error in fetch request or processing TTS response:', error);
+          window.botpress.on('message', (message) => {
+            console.log("Received message event:", message);
+            
+            // Deduplicate messages using their ID
+            if (processedMessages.has(message.id)) return;
+            processedMessages.add(message.id);
+            
+            // Process only bot responses (which lack metadata)
+            if (typeof message.metadata === "undefined") {
+              const text = message.block?.block?.text;
+              if (!text) {
+                console.warn("No text found in message:", message);
+                return;
+              }
+              console.log("Text to synthesize (bot response):", text);
+              
+              // Stop any currently playing audio before playing new one
+              if (currentAudio) {
+                currentAudio.pause();
+                currentAudio.currentTime = 0;
+              }
+              
+              // Send text to TTS backend
+              fetch('https://dk5rf8-3000.csb.app/synthesize', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text: text })
+              })
+              .then(response => {
+                if (!response.ok) throw new Error('TTS endpoint failed');
+                return response.blob();
+              })
+              .then(blob => {
+                const url = URL.createObjectURL(blob);
+                currentAudio = new Audio(url);
+                currentAudio.play().catch(err => console.error("Error during audio playback:", err));
+              })
+              .catch(error => {
+                console.error('Error in TTS processing:', error);
+              });
+            } else {
+              console.log("Message ignored (likely from user):", message);
+            }
           });
-        } else {
-          console.log("Message ignored (likely from user):", message);
         }
       });
     });
-  });
-</script>
+  </script>
+  
 
 </body>
 </html>
