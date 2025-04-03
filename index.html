@@ -28,7 +28,7 @@
       position: absolute;
       top: 0; left: 0;
       width: 100%; height: 100%;
-      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Cpath opacity='.5' d='M96 95h4v1h-4v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4zm-1 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Cpath opacity='.5' d='M96 95h4v1h-4v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4zm-1 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
       opacity: 0.3;
     }
     .container {
@@ -291,49 +291,29 @@
     </div>
   </div>
 
-
-
   <script defer>
     window.addEventListener('load', function() {
-      // Define Botpress session storage keys (adjust as needed)
-      const bpSessionKeys = ['bpConversationId', 'bpToken', 'bpUserId', 'bpSessionStart'];
-      const now = Date.now();
-      const sessionStart = localStorage.getItem('bpSessionStart');
-  
-      // If a session start time exists, check if more than 5 minutes have passed.
-      if (sessionStart) {
-        if (now - parseInt(sessionStart, 10) > 300000) { // 300,000 ms = 5 minutes
-          bpSessionKeys.forEach(function(key) {
-            localStorage.removeItem(key);
-          });
-          console.log('Botpress session expired. Local storage cleared for a fresh session.');
-        }
-      } else {
-        // No session exists, so store the current timestamp.
-        localStorage.setItem('bpSessionStart', now.toString());
-      }
-  
-      // Initialize Botpress if the script has loaded correctly
+ 
+      // Prevent reinitialization if already done.
+      if (window.__botpressInitialized) return;
+      window.__botpressInitialized = true;
+      
+      // Ensure Botpress script is loaded.
       if (!window.botpress) {
         console.error("Botpress script failed to load.");
         return;
       }
       
-      // Retrieve the stored conversation ID (if available)
-      const savedConvId = localStorage.getItem('bpConversationId');
-  
-      // Prevent reinitialization if already done
-      if (window.__botpressInitialized) return;
-      window.__botpressInitialized = true;
-      
       console.log("Initializing Botpress...");
-  
-      // Initialize the Botpress webchat
+    //  // Clear Botpress-related local storage keys on every page load for a new session.
+    //  const botpressKeys = ['state', 'bpToken', 'bpUserId', 'bpSessionStart'];
+    //   botpressKeys.forEach(key => localStorage.removeItem(key));
+    //   console.log('Local storage cleared. Starting a fresh Botpress session.');
+    localStorage.removeItem('bp-webchat-1b16b64e-ea32-4160-a8c1-6c61d3fddd0e')
+      // Initialize the Botpress webchat without a saved conversation ID (forcing a new session)
       window.botpress.init({
         "botId": "d3aea06d-0f04-4701-bec3-b457caf79902",
         "clientId": "1b16b64e-ea32-4160-a8c1-6c61d3fddd0e",
-        // Use the saved conversation ID if it exists
-        "conversationId": savedConvId ? savedConvId : undefined,
         "configuration": {
           "botName": "Elisa AI Chat",
           "botAvatar": "https://media.istockphoto.com/id/1445426863/vector/chat-bot-vector-logo-design-concept.jpg?s=612x612&w=0&k=20&c=XDdfzS4lNW9yxQ0BQGZq9KMLL4bJ8ywXlYdAhBSuoCA=",
@@ -349,13 +329,11 @@
           "fontFamily": "inter",
           "radius": 1
         },
-        // On initialization, store the conversation ID and update the session start time
+        // On initialization, store the new conversation ID (if needed)
         onInit: function() {
           const currentConvId = window.botpress.getConversationId();
-          if (!savedConvId || savedConvId !== currentConvId) {
-            localStorage.setItem('bpConversationId', currentConvId);
-            localStorage.setItem('bpSessionStart', Date.now().toString());
-          }
+          localStorage.setItem('bpConversationId', currentConvId);
+          localStorage.setItem('bpSessionStart', Date.now().toString());
         }
       });
       
@@ -367,7 +345,6 @@
         let currentAudio = null;
         const processedMessages = new Set();
         
-        // Register the message listener only once.
         if (!window.__botpressTTSMessageListenerRegistered) {
           window.__botpressTTSMessageListenerRegistered = true;
           
@@ -378,7 +355,7 @@
             if (processedMessages.has(message.id)) return;
             processedMessages.add(message.id);
             
-            // Process only bot responses (which typically lack metadata).
+            // Process only bot responses (typically those without metadata).
             if (typeof message.metadata === "undefined") {
               const text = message.block?.block?.text;
               if (!text) {
@@ -393,7 +370,7 @@
                 currentAudio.currentTime = 0;
               }
               
-              // Call your TTS backend to convert text to audio.
+              // Call the TTS backend to convert text to audio.
               fetch('https://dk5rf8-3000.csb.app/synthesize', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -419,7 +396,5 @@
       });
     });
   </script>
-  
-
 </body>
 </html>
