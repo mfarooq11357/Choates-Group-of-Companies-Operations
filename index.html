@@ -305,10 +305,7 @@
       }
       
       console.log("Initializing Botpress...");
-    //  // Clear Botpress-related local storage keys on every page load for a new session.
-    //  const botpressKeys = ['state', 'bpToken', 'bpUserId', 'bpSessionStart'];
-    //   botpressKeys.forEach(key => localStorage.removeItem(key));
-    //   console.log('Local storage cleared. Starting a fresh Botpress session.');
+  
     localStorage.removeItem('bp-webchat-1b16b64e-ea32-4160-a8c1-6c61d3fddd0e')
       // Initialize the Botpress webchat without a saved conversation ID (forcing a new session)
       window.botpress.init({
@@ -316,7 +313,7 @@
         "clientId": "1b16b64e-ea32-4160-a8c1-6c61d3fddd0e",
         "configuration": {
           "botName": "Elisa AI Chat",
-          "botAvatar": "https://media.istockphoto.com/id/1445426863/vector/chat-bot-vector-logo-design-concept.jpg?s=612x612&w=0&k=20&c=XDdfzS4lNW9yxQ0BQGZq9KMLL4bJ8ywXlYdAhBSuoCA=",
+          "botAvatar": "https://i.ibb.co/KjFmLnmz/Whats-App-Image-2025-04-07-at-01-18-17-ac112b1f.jpg",
           "initialPayload": "welcome",
           "website": {},
           "email": {},
