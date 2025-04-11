@@ -28,7 +28,7 @@
       position: absolute;
       top: 0; left: 0;
       width: 100%; height: 100%;
-      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Cpath opacity='.5' d='M96 95h4v1h-4v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4zm-1 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Cpath opacity='.5' d='M96 95h4v1h-4v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4zm-1 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
       opacity: 0.3;
     }
     .container {
@@ -232,6 +232,33 @@
       .subscribe-btn { padding: 0.8rem 1.2rem; font-size: 0.9rem; }
       .coming-soon-box { padding: 1.5rem; }
     }
+    /* Chat bubble for static notification */
+    .chat-bubble {
+      position: fixed;
+      bottom: 80px;
+      right: 20px;
+      background: var(--highlight-color);
+      color: #fff;
+      padding: 10px 15px;
+      border-radius: 20px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      max-width: 250px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      z-index: 10000;
+      display: none; /* Initially hidden, shown via JS */
+    }
+    .chat-bubble::after {
+      content: "";
+      position: absolute;
+      bottom: -10px;
+      right: 20px;
+      border-width: 10px 10px 0;
+      border-style: solid;
+      border-color: var(--highlight-color) transparent;
+      display: block;
+      width: 0;
+    }
   </style>
   <!-- Load Botpress Webchat script with defer -->
   <script src="https://cdn.botpress.cloud/webchat/v2.3/inject.js" defer></script>
@@ -291,9 +318,11 @@
     </div>
   </div>
 
+  <!-- Chat Bubble Element (initially hidden) -->
+  <div id="chatBubble" class="chat-bubble">Hi, I am Elisa, how can I help you?</div>
+
   <script defer>
     window.addEventListener('load', function() {
- 
       // Prevent reinitialization if already done.
       if (window.__botpressInitialized) return;
       window.__botpressInitialized = true;
@@ -305,8 +334,8 @@
       }
       
       console.log("Initializing Botpress...");
-  
-    localStorage.removeItem('bp-webchat-1b16b64e-ea32-4160-a8c1-6c61d3fddd0e')
+
+      localStorage.removeItem('bp-webchat-1b16b64e-ea32-4160-a8c1-6c61d3fddd0e');
       // Initialize the Botpress webchat without a saved conversation ID (forcing a new session)
       window.botpress.init({
         "botId": "d3aea06d-0f04-4701-bec3-b457caf79902",
@@ -333,12 +362,30 @@
           localStorage.setItem('bpSessionStart', Date.now().toString());
         }
       });
-      
-      // When the webchat is ready, open it and set up the message listener for text-to-speech.
+
+      // Notification logic
+      let chatOpened = false;
+      const chatBubble = document.getElementById('chatBubble');
+
+      // Show bubble after 3 seconds if chat not opened
+      setTimeout(() => {
+        if (!chatOpened) {
+          chatBubble.style.display = 'block';
+        }
+      }, 3000);
+
+      // Hide bubble when chat opens (triggered by bubble click, Botpress icon, or automatic open)
+      window.botpress.on("webchat:open", () => {
+        chatOpened = true;
+        chatBubble.style.display = 'none';
+      });
+
+      // When the webchat is ready, open it and set up the message listener for text-to-speech
       window.botpress.on("webchat:ready", () => {
         console.log("Webchat is ready.");
-        window.botpress.open();
-        
+        chatBubble.style.display = 'none';
+
+        window.botpress.open(); // Automatically open the chat
         let currentAudio = null;
         const processedMessages = new Set();
         
@@ -348,11 +395,11 @@
           window.botpress.on('message', (message) => {
             console.log("Received message event:", message);
             
-            // Deduplicate messages using their ID.
+            // Deduplicate messages using their ID
             if (processedMessages.has(message.id)) return;
             processedMessages.add(message.id);
             
-            // Process only bot responses (typically those without metadata).
+            // Process only bot responses (typically those without metadata)
             if (typeof message.metadata === "undefined") {
               const text = message.block?.block?.text;
               if (!text) {
@@ -361,13 +408,13 @@
               }
               console.log("Text to synthesize (bot response):", text);
               
-              // Stop any currently playing audio before playing the new one.
+              // Stop any currently playing audio before playing the new one
               if (currentAudio) {
                 currentAudio.pause();
                 currentAudio.currentTime = 0;
               }
               
-              // Call the TTS backend to convert text to audio.
+              // Call the TTS backend to convert text to audio
               fetch('https://dk5rf8-3000.csb.app/synthesize', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -390,6 +437,13 @@
             }
           });
         }
+      });
+
+      // Handle bubble click: hide immediately and open chat
+      chatBubble.addEventListener('click', function() {
+        chatBubble.style.display = 'none';
+        chatOpened = true;
+        window.botpress.open();
       });
     });
   </script>
